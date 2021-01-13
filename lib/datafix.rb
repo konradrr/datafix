@@ -5,7 +5,7 @@ require "datafix/datafix_status_presenter"
 require "datafix/railtie" if defined?(Rails)
 
 class Datafix
-  DIRECTIONS = %w[up down]
+  DIRECTIONS = %w[up down].freeze
 
   class << self
     def migrate(direction)
@@ -81,7 +81,7 @@ class Datafix
   private
 
   def fetch_version
-    migrations = ActiveRecord::MigrationContext.new(Rails.root.join("db", "datafixes")).migrations
+    migrations = ActiveRecord::MigrationContext.new(Rails.root.join("db", "datafixes"), ActiveRecord::SchemaMigration).migrations
     migrations.detect do |migration|
       migration.name == script_name
     end.try(:version)
